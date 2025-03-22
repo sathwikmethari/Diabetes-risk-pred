@@ -1,15 +1,15 @@
 import torch
+import numpy as np
 import torch.nn as nn
 
-def encoding(data_copy,cat_columns):
+def encoding(data_copy, cat_columns):
     for column in cat_columns:
-        if column=='class':
-            data_copy[column]=data_copy[column].map({'Positive':1,'Negative':0})
-            continue
-        if column=='Gender':
-            data_copy[column]=data_copy[column].map({'Male':0,'Female':1})
-            continue
-        data_copy[column]=data_copy[column].map({'No':0,'Yes':1})
+        if column == 'class':
+            data_copy[column] = np.where(data_copy[column] == 'Positive', 1, 0)
+        elif column == 'Gender':
+            data_copy[column] = np.where(data_copy[column] == 'Male', 0, 1)
+        else:
+            data_copy[column] = np.where(data_copy[column] == 'Yes', 1, 0)
         
 def accuracy_fn(y_true, y_pred):
     correct = torch.eq(y_true, y_pred).sum().item() # torch.eq() calculates where two tensors are equal
