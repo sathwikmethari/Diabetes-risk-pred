@@ -18,13 +18,12 @@ st.set_page_config(
 def load_models():
     scaler=pickle.load(open('models/pytorch_scaler.pkl','rb'))
     columns_dict=pickle.load(open('models/columns_dict.pkl','rb'))
-    return scaler, columns_dict
+    pytorch_model=torch.load('model/pytorch_model.pth')
+    return scaler, columns_dict, pytorch_model
 
-scaler, columns_dict = load_models()
+scaler, columns_dict, pytorch_model = load_models()
 #print("Models loaded successfully")
 
-pytorch_model=ClassificationModel(len(columns_dict['columns']),64)
-pytorch_model.load_state_dict(torch.load('models/pytorch_model.pth'))
 pytorch_model.to(device)
 Input_dict={}
 for column in columns_dict['columns']:
