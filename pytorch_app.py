@@ -4,7 +4,7 @@ device='cuda' if torch.cuda.is_available() else 'cpu'
 #print(device)
 import pickle
 import streamlit as st
-from pytorchclassifier import ClassificationModel, accuracy_fn, encoding
+from pytorchclassifier import ClassificationModel, encoding
 from pytorchclassifier import ClassificationModel, encoding
 import warnings
 warnings.filterwarnings('ignore')
@@ -18,7 +18,9 @@ st.set_page_config(
 def load_models():
     scaler=pickle.load(open('models/pytorch_scaler.pkl','rb'))
     columns_dict=pickle.load(open('models/columns_dict.pkl','rb'))
-    pytorch_model=torch.load('model/pytorch_model.pth')
+    #Its is not recommended to use pickle to load pytorch models, but for this simple model it is fine
+    #try not to use weights_only=False.
+    pytorch_model=torch.load('models/pytorch_model.pt',weights_only=False)
     return scaler, columns_dict, pytorch_model
 
 scaler, columns_dict, pytorch_model = load_models()
